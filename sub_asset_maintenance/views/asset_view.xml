@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_account_asset_asset_purchase_tree">
+		<field name="name">account.asset.asset.tree.inherit.sub_asset_maintenance</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_asset_purchase_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+				<field name="asset_code" />
+			</field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_account_asset_asset_form">
+		<field name="name">account.asset.asset.form.inherit.sub_asset_maintenance</field>
+        <field name="model">account.asset.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_asset_form"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+				<field name="asset_category_code" />
+                <field name="asset_code" />
+                <field name="product_id" domain="[('is_asset', '=', True)]"/>
+			</field>
+            <xpath expr="//form[1]/sheet[1]/notebook[1]" position="inside">
+               <page name="asset_location" string="Asset Location">
+                   <group>
+                       <field name="quant_ids" widget="one2many_list">
+                            <tree string="Inventory Valuation" create="0" delete="0">
+                                <field name="product_id"/>
+                                <field name="location_id"/>
+                                <field name="lot_id" groups="stock.group_production_lot"/>
+                                <field name="package_id" groups="stock.group_tracking_lot"/>
+                                <field name="owner_id" groups="stock.group_tracking_owner"/>
+                                <field name="quantity" string="On Hand"/>
+                                <field name="product_uom_id" groups="uom.group_uom"/>
+                                <field name="company_id" groups="base.group_multi_company"/>
+                            </tree>
+                       </field>
+                       <field name="notes"/>
+                   </group>
+               </page>
+            </xpath>
+        </field>
+    </record>
+
+	<record model="ir.ui.view" id="view_account_asset_category_tree">
+		<field name="name">account.asset.category.tree.inherit.sub_asset_maintenance</field>
+        <field name="model">account.asset.category</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_category_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+				<field name="sub_asset_category_id" />
+			</field>
+        </field>
+    </record>
+
+	<record model="ir.ui.view" id="view_account_asset_category_form">
+		<field name="name">account.asset.category.form.inherit.sub_asset_maintenance</field>
+        <field name="model">account.asset.category</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_category_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form[1]/sheet[1]/group[1]" position="before">
+                <div class="oe_button_box" name="button_box">
+                    <button class="oe_stat_button" name="open_asset_list"  type="object" icon="fa-pencil">
+                        <field string="Asset List" name="asset_count" widget="statinfo" />
+                    </button>
+                </div>
+            </xpath>
+            <field name="open_asset" position="before">
+				<field name="parent_id" />
+                <field name="sub_asset_category_id" />
+			</field>
+        </field>
+    </record>
+
+	<record model="ir.ui.view" id="view_sub_asset_category_form">
+		<field name="name">sub.asset.category.form</field>
+		<field name="model">sub.asset.category</field>
+		<field name="arch" type="xml">
+			<form string="Asset Category">
+				<sheet>
+					<group>
+						<field name="name" string="Name" />
+                        <field name="code" string="Code" />
+                        <field name="sequence_id" string="Sequence" require="True"/>
+					</group>
+				</sheet>
+			</form>
+		</field>
+    </record>
+
+    <record model="ir.ui.view" id="view_sub_asset_category_tree">
+        <field name="name">sub.asset.category.tree</field>
+        <field name="model">sub.asset.category</field>
+        <field name="arch" type="xml">
+            <tree string="Asset Category">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_sub_asset_category">
+        <field name="name">Asset Category</field>
+        <field name="res_model">sub.asset.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_asset_transfer">
+        <field name="name">Asset Transfer</field>
+        <field name="res_model">stock.picking</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_scrap_asset">
+        <field name="name">Scrap Asset</field>
+        <field name="res_model">stock.scrap</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_asset_adjustment">
+        <field name="name">Asset Adjustment</field>
+        <field name="res_model">stock.inventory</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="menu_sub_asset_category"
+      parent="account.account_management_menu"
+      name="Asset Category"
+      action="action_sub_asset_category"
+      sequence="150" groups="account.group_account_manager"/>
+
+    <menuitem id="menu_asset_transfer"
+      parent="account.menu_finance_entries_management"
+      name="Asset Transfer"
+      action="action_asset_transfer"
+      sequence="150"/>
+
+    <menuitem id="menu_scrap_asset"
+      parent="account.menu_finance_entries_management"
+      name="Scrap Asset"
+      action="action_scrap_asset"
+      sequence="150"/>
+
+	<menuitem id="menu_asset_adjustment"
+      parent="account.menu_finance_entries_management"
+      name="Asset Adjustment"
+      action="action_asset_adjustment"
+      sequence="150"/>
+</odoo>
+	

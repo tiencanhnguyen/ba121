@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="report_account_assetcode"
+            string="Asset Code (PDF)"
+            model="account.asset.asset"
+            report_type="qweb-pdf"
+            name="sub_custom_field_asset_maintenance.report_assetcode"
+            file="sub_custom_field_asset_maintenance.report_assetcode"
+            print_report_name="'Asset Code - %s' % (object.name)"
+        />
+
+    </data>
+</odoo>

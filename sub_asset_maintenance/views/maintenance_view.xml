@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_equipment_form">
+		<field name="name">maintenance.equipment.form.inherit.sub_asset_maintenance</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_view_form"/>
+        <field name="arch" type="xml">
+            <field name="category_id" position="after">
+				<field name="product_id" domain="[('is_equipment', '=', True)]"/>
+			</field>
+            <field name="location" position="after">
+				<field name="warehouse_id"/>
+			</field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_maintenance_request_kanban">
+		<field name="name">maintenance.request.kanban.inherit.sub_asset_maintenance</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="maintenance.hr_equipment_request_view_kanban"/>
+        <field name="arch" type="xml">
+            <field name="stage_id" position="after">
+				<field name="reference"/>
+			</field>
+            <xpath expr="//span[@class='oe_grey']" position="before">
+                <span name="reference">Maintenance ID : <field name="reference"/><br/></span>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_maintenance_request_form">
+		<field name="name">maintenance.request.form.inherit.sub_asset_maintenance</field>
+        <field name="model">maintenance.request</field>
+        <field name="inherit_id" ref="hr_maintenance.maintenance_request_view_form_inherit_hr"/>
+        <field name="arch" type="xml">
+            <field name="schedule_date" position="after">
+				<field name="warehouse_id" attrs="{'required': True}"/>
+                <field name="area"/>
+			</field>
+            <field name="employee_id" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+            <field name="user_id" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+        </field>
+    </record>
+	            
+</odoo>
+	
